@@ -40,13 +40,13 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Animasi untuk slider */
+        /* Animasi untuk slider klien */
         @keyframes scroll {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            100% { transform: translateX(calc(-250px * 6)); } /* (lebar item) * (jumlah item) */
         }
         .scrolling-slider {
-            animation: scroll 40s linear infinite;
+            animation: scroll 30s linear infinite;
         }
 
         /* Style untuk FAQ Accordion */
@@ -68,6 +68,26 @@
             transform: rotate(180deg);
         }
 
+        /* Style untuk Modal Proyek */
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-container {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* Sembunyikan scrollbar untuk slider proyek */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
     </style>
 </head>
 <body class="text-gray-300">
@@ -76,13 +96,14 @@
     <header id="header" class="bg-gray-900/70 backdrop-blur-md sticky top-0 z-50">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#">
-                <img src="https://i.imgur.com/ZEhCaMV.png" alt="Selawe Communication Logo" class="h-10 mb-4">
+                <img src="https://i.imgur.com/ZEhCaMV.png" alt="Selawe Communication Logo" class="h-10">
             </a>
             
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center space-x-6 lg:space-x-8 text-sm lg:text-base">
                 <a href="#tentang" class="text-gray-300 hover:text-yellow-400 transition duration-300">Tentang</a>
                 <a href="#layanan" class="text-gray-300 hover:text-yellow-400 transition duration-300">Layanan</a>
+                <a href="#proyek" class="text-gray-300 hover:text-yellow-400 transition duration-300">Proyek</a>
                 <a href="#kolaborasi" class="text-gray-300 hover:text-yellow-400 transition duration-300">Klien</a>
                 <a href="#faq" class="text-gray-300 hover:text-yellow-400 transition duration-300">FAQ</a>
                 <a href="#footer" class="bg-yellow-400 text-gray-900 font-bold py-2 px-5 rounded-full hover:bg-yellow-500 transition duration-300 shadow-lg shadow-yellow-500/20">Hubungi Kami</a>
@@ -98,6 +119,7 @@
         <div id="mobile-menu" class="hidden md:hidden bg-gray-800">
             <a href="#tentang" class="block py-3 px-6 text-gray-300 hover:bg-gray-700">Tentang</a>
             <a href="#layanan" class="block py-3 px-6 text-gray-300 hover:bg-gray-700">Layanan</a>
+            <a href="#proyek" class="block py-3 px-6 text-gray-300 hover:bg-gray-700">Proyek</a>
             <a href="#kolaborasi" class="block py-3 px-6 text-gray-300 hover:bg-gray-700">Klien</a>
             <a href="#faq" class="block py-3 px-6 text-gray-300 hover:bg-gray-700">FAQ</a>
             <a href="#footer" class="block py-3 px-6 text-gray-300 hover:bg-gray-700">Hubungi Kami</a>
@@ -161,35 +183,120 @@
             </div>
         </section>
         
-        <!-- ===== Keunggulan Kami Section ===== -->
-        <section id="keunggulan" class="py-24 bg-gray-800 overflow-hidden">
+        <!-- ===== Proyek Kami Section ===== -->
+        <section id="proyek" class="py-24 bg-gray-800 overflow-hidden">
              <div class="container mx-auto px-6">
-                <div class="text-center mb-16" data-aos="fade-up">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Mengapa Memilih Kami?</h2>
-                    <p class="max-w-2xl mx-auto text-gray-400">Kami tidak hanya memberikan layanan, kami memberikan hasil.</p>
-                </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <div class="bg-gray-900 p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300 border border-gray-700 hover:border-yellow-400" data-aos="fade-up" data-aos-delay="100">
-                        <i data-lucide="users-2" class="mx-auto w-12 h-12 text-yellow-400 mb-6"></i>
-                        <h3 class="font-bold text-xl text-white mb-2">Tim Berpengalaman</h3>
-                        <p class="text-gray-400 text-sm">Tim kami terdiri dari para ahli di bidangnya masing-masing, siap memberikan solusi terbaik.</p>
+                 <div class="text-center mb-16" data-aos="fade-up">
+                     <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Proyek yang Telah Kami Kerjakan</h2>
+                     <p class="max-w-2xl mx-auto text-gray-400">Kami bangga telah menjadi bagian dari kesuksesan berbagai brand dan institusi ternama.</p>
+                     <div class="w-24 h-1 bg-yellow-400 mx-auto mt-4"></div>
+                 </div>
+                 <div class="relative" data-aos="fade-up" data-aos-delay="100">
+                    <!-- Left Arrow -->
+                    <button id="scroll-left-btn" class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-4 md:-translate-x-8 z-20 bg-gray-700/50 hover:bg-yellow-400/80 text-white hover:text-gray-900 p-2 rounded-full transition-all duration-300">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                    </button>
+                    <!-- Right Arrow -->
+                    <button id="scroll-right-btn" class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-4 md:translate-x-8 z-20 bg-gray-700/50 hover:bg-yellow-400/80 text-white hover:text-gray-900 p-2 rounded-full transition-all duration-300">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </button>
+                    
+                    <!-- Project Slider Container -->
+                    <div id="proyek-container" class="flex overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar -mx-4 px-4 py-4">
+                        <div class="flex space-x-8">
+                             <!-- Project Card: Prabowo-Gibran -->
+                             <div class="snap-start flex-shrink-0 w-[320px] bg-gray-900 rounded-lg flex flex-col items-center text-center border border-gray-700 overflow-hidden">
+                                 <div class="w-full h-48 bg-gray-700"><img src="https://i.imgur.com/t5I0vh0.png" alt="Foto Kampanye Prabowo-Gibran" class="w-full h-full object-cover"></div>
+                                 <div class="p-6 flex flex-col flex-grow items-center">
+                                     <h3 class="font-bold text-xl text-white mb-2">Kampanye Prabowo-Gibran</h3>
+                                     <p class="text-gray-400 text-sm mb-6 flex-grow">Manajemen komunikasi strategis dan rekayasa persepsi digital selama kampanye Pemilu 2024.</p>
+                                     <button class="open-modal-btn mt-auto bg-yellow-400 text-gray-900 font-semibold py-2 px-5 rounded-full hover:bg-yellow-500 transition duration-300 text-sm"
+                                             data-title="Kampanye Pemenangan Prabowo-Gibran"
+                                             data-description="Kami berperan sentral dalam merancang dan mengeksekusi strategi komunikasi digital untuk kampanye pemenangan Prabowo-Gibran. Lingkup kerja kami meliputi digital perception engineering, manajemen isu & krisis di media sosial, #TrendingTopic campaign, serta optimalisasi aset digital untuk menjangkau dan meyakinkan pemilih muda di seluruh Indonesia.">
+                                         Lihat Detail
+                                     </button>
+                                 </div>
+                             </div>
+                             <!-- Project Card: Pertamina -->
+                             <div class="snap-start flex-shrink-0 w-[320px] bg-gray-900 rounded-lg flex flex-col items-center text-center border border-gray-700 overflow-hidden">
+                                 <div class="w-full h-48 bg-gray-700"><img src="https://i.imgur.com/doCoTlg.jpeg" alt="Foto Proyek Pertamina" class="w-full h-full object-cover"></div>
+                                 <div class="p-6 flex flex-col flex-grow items-center">
+                                     <h3 class="font-bold text-xl text-white mb-2">Pertamina</h3>
+                                     <p class="text-gray-400 text-sm mb-6 flex-grow">Monitoring dan analisa isu strategis untuk menjaga reputasi perusahaan di ranah publik dan digital.</p>
+                                     <button class="open-modal-btn mt-auto bg-yellow-400 text-gray-900 font-semibold py-2 px-5 rounded-full hover:bg-yellow-500 transition duration-300 text-sm"
+                                             data-title="Monitoring Isu Strategis Pertamina"
+                                             data-description="Bekerja sama dengan Pertamina, kami menyediakan layanan monitoring dan analisa isu secara real-time. Tim kami melacak percakapan di media konvensional dan digital, mengidentifikasi potensi krisis, dan memberikan rekomendasi strategis untuk mitigasi risiko dan penguatan citra positif perusahaan sebagai BUMN energi nasional.">
+                                         Lihat Detail
+                                     </button>
+                                 </div>
+                             </div>
+                             <!-- Project Card: BNI -->
+                             <div class="snap-start flex-shrink-0 w-[320px] bg-gray-900 rounded-lg flex flex-col items-center text-center border border-gray-700 overflow-hidden">
+                                 <div class="w-full h-48 bg-white flex items-center justify-center p-4"><img src="https://i.imgur.com/6OIl1wu.png" alt="Logo BNI" class="max-w-full max-h-full object-contain"></div>
+                                 <div class="p-6 flex flex-col flex-grow items-center">
+                                     <h3 class="font-bold text-xl text-white mb-2">BNI</h3>
+                                     <p class="text-gray-400 text-sm mb-6 flex-grow">Pengembangan strategi komunikasi korporat untuk peluncuran produk dan layanan perbankan digital.</p>
+                                     <button class="open-modal-btn mt-auto bg-yellow-400 text-gray-900 font-semibold py-2 px-5 rounded-full hover:bg-yellow-500 transition duration-300 text-sm"
+                                             data-title="Strategi Komunikasi Korporat BNI"
+                                             data-description="Selawe Communication mendukung BNI dalam menyusun strategi komunikasi yang komprehensif untuk berbagai inisiatif korporat. Kami membantu merumuskan pesan kunci, merancang materi komunikasi, serta mengelola hubungan media untuk memastikan setiap program dan produk baru BNI diterima dengan baik oleh publik dan stakeholder.">
+                                         Lihat Detail
+                                     </button>
+                                 </div>
+                             </div>
+                             <div class="snap-start flex-shrink-0 w-[320px] bg-gray-900 rounded-lg flex flex-col items-center text-center border border-gray-700 overflow-hidden">
+                                 <div class="w-full h-48 bg-gray-700"><img src="https://i.imgur.com/MKPu1vx.jpeg" alt="Logo Grab" class="w-full h-full object-cover"></div>
+                                 <div class="p-6 flex flex-col flex-grow items-center">
+                                     <h3 class="font-bold text-xl text-white mb-2">Grab Indonesia</h3>
+                                     <p class="text-gray-400 text-sm mb-6 flex-grow">Aktivasi kampanye digital dan manajemen influencer untuk meningkatkan engagement pengguna.</p>
+                                     <button class="open-modal-btn mt-auto bg-yellow-400 text-gray-900 font-semibold py-2 px-5 rounded-full hover:bg-yellow-500 transition duration-300 text-sm"
+                                             data-title="Kampanye Digital Grab Indonesia"
+                                             data-description="Kami berkolaborasi dengan Grab Indonesia dalam merancang dan menjalankan kampanye digital yang kreatif. Melalui manajemen influencer dan aktivasi media sosial, kami berhasil meningkatkan interaksi pengguna dengan brand Grab, memperkuat posisi Grab sebagai super-app terdepan di Indonesia.">
+                                         Lihat Detail
+                                     </button>
+                                 </div>
+                             </div>
+                             <!-- Project Card: Unhasy -->
+                             <div class="snap-start flex-shrink-0 w-[320px] bg-gray-900 rounded-lg flex flex-col items-center text-center border border-gray-700 overflow-hidden">
+                                 <div class="w-full h-48 bg-white flex items-center justify-center p-4"><img src="https://i.imgur.com/6iu4JQS.png" alt="Logo Unhasy" class="max-w-full max-h-full object-contain"></div>
+                                 <div class="p-6 flex flex-col flex-grow items-center">
+                                     <h3 class="font-bold text-xl text-white mb-2">Universitas Hasyim Asy'ari</h3>
+                                     <p class="text-gray-400 text-sm mb-6 flex-grow">Re-branding dan kampanye penerimaan mahasiswa baru untuk meningkatkan citra dan jangkauan universitas.</p>
+                                     <button class="open-modal-btn mt-auto bg-yellow-400 text-gray-900 font-semibold py-2 px-5 rounded-full hover:bg-yellow-500 transition duration-300 text-sm"
+                                             data-title="Branding & Kampanye PMB Unhasy"
+                                             data-description="Kami membantu Universitas Hasyim Asy'ari (Unhasy) dalam upaya re-branding untuk memperkuat posisinya sebagai institusi pendidikan unggul. Proyek ini mencakup pengembangan strategi branding, pembuatan aset digital, dan pelaksanaan kampanye penerimaan mahasiswa baru (PMB) yang terarah untuk menarik calon mahasiswa berkualitas.">
+                                         Lihat Detail
+                                     </button>
+                                 </div>
+                             </div>
+                             <!-- Project Card: Paragon -->
+                             <div class="snap-start flex-shrink-0 w-[320px] bg-gray-900 rounded-lg flex flex-col items-center text-center border border-gray-700 overflow-hidden">
+                                 <div class="w-full h-48 bg-white flex items-center justify-center p-4"><img src="https://i.imgur.com/5qNT9oZ.png" alt="Logo Paragon" class="max-w-full max-h-full object-contain"></div>
+                                 <div class="p-6 flex flex-col flex-grow items-center">
+                                     <h3 class="font-bold text-xl text-white mb-2">ParagonCorp</h3>
+                                     <p class="text-gray-400 text-sm mb-6 flex-grow">Penguatan citra korporat dan employer branding untuk salah satu perusahaan kosmetik terbesar di Indonesia.</p>
+                                     <button class="open-modal-btn mt-auto bg-yellow-400 text-gray-900 font-semibold py-2 px-5 rounded-full hover:bg-yellow-500 transition duration-300 text-sm"
+                                             data-title="Strategi Komunikasi ParagonCorp"
+                                             data-description="Kami bermitra dengan Paragon Technology and Innovation untuk memperkuat narasi mereka sebagai perusahaan yang inovatif dan berfokus pada kebaikan. Proyek ini meliputi strategi komunikasi korporat, employer branding untuk menarik talenta terbaik, serta manajemen kampanye untuk produk-produk unggulan mereka.">
+                                         Lihat Detail
+                                     </button>
+                                 </div>
+                             </div>
+                            <!-- Project Card: Gus Miftah -->
+                             <div class="snap-start flex-shrink-0 w-[320px] bg-gray-900 rounded-lg flex flex-col items-center text-center border border-gray-700 overflow-hidden">
+                                 <div class="w-full h-48 bg-gray-700"><img src="https://i.imgur.com/SW0bWwO.jpeg" alt="Foto Gus Miftah" class="w-full h-full object-cover"></div>
+                                 <div class="p-6 flex flex-col flex-grow items-center">
+                                     <h3 class="font-bold text-xl text-white mb-2">Personal Branding Gus Miftah</h3>
+                                     <p class="text-gray-400 text-sm mb-6 flex-grow">Manajemen persepsi dan strategi konten digital untuk memperluas jangkauan dakwah di kalangan milenial & Gen Z.</p>
+                                     <button class="open-modal-btn mt-auto bg-yellow-400 text-gray-900 font-semibold py-2 px-5 rounded-full hover:bg-yellow-500 transition duration-300 text-sm"
+                                             data-title="Personal Branding Gus Miftah"
+                                             data-description="Selawe Communication dipercaya untuk mengelola strategi personal branding Gus Miftah di ranah digital. Kami merancang strategi konten yang relevan, mengelola kanal-kanal media sosial, dan membangun narasi dakwah yang sejuk dan merangkul generasi muda, sehingga pesan-pesan kebaikan dapat tersebar lebih luas.">
+                                         Lihat Detail
+                                     </button>
+                                 </div>
+                             </div>
+                        </div>
                     </div>
-                    <div class="bg-gray-900 p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300 border border-gray-700 hover:border-yellow-400" data-aos="fade-up" data-aos-delay="200">
-                        <i data-lucide="database-zap" class="mx-auto w-12 h-12 text-yellow-400 mb-6"></i>
-                        <h3 class="font-bold text-xl text-white mb-2">Strategi Berbasis Data</h3>
-                        <p class="text-gray-400 text-sm">Setiap keputusan dan strategi kami didasarkan pada data dan analisa yang akurat.</p>
-                    </div>
-                    <div class="bg-gray-900 p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300 border border-gray-700 hover:border-yellow-400" data-aos="fade-up" data-aos-delay="300">
-                        <i data-lucide="lightbulb" class="mx-auto w-12 h-12 text-yellow-400 mb-6"></i>
-                        <h3 class="font-bold text-xl text-white mb-2">Kreativitas Tanpa Batas</h3>
-                        <p class="text-gray-400 text-sm">Kami menghadirkan ide-ide segar dan kreatif untuk membuat brand Anda menonjol.</p>
-                    </div>
-                    <div class="bg-gray-900 p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300 border border-gray-700 hover:border-yellow-400" data-aos="fade-up" data-aos-delay="400">
-                        <i data-lucide="target" class="mx-auto w-12 h-12 text-yellow-400 mb-6"></i>
-                        <h3 class="font-bold text-xl text-white mb-2">Hasil Terukur</h3>
-                        <p class="text-gray-400 text-sm">Fokus kami adalah memberikan hasil yang nyata dan terukur untuk bisnis Anda.</p>
-                    </div>
-                </div>
+                 </div>
              </div>
         </section>
 
@@ -203,9 +310,9 @@
                 
                 <!-- Tab Buttons -->
                 <div id="tab-buttons" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-10" data-aos="fade-up" data-aos-delay="100">
-                    <button data-tab="strategi" class="tab-btn bg-yellow-400 text-gray-900 font-semibold py-2 px-6 rounded-full shadow-md">Strategi & Analisa</button>
-                    <button data-tab="digital" class="tab-btn bg-gray-800 text-gray-300 font-semibold py-2 px-6 rounded-full shadow-md">Digital & Online</button>
-                    <button data-tab="langsung" class="tab-btn bg-gray-800 text-gray-300 font-semibold py-2 px-6 rounded-full shadow-md">Layanan Langsung</button>
+                    <button data-tab="strategi" class="tab-btn bg-yellow-400 text-gray-900 font-semibold py-2 px-6 rounded-full shadow-md">Crisis Engineering</button>
+                    <button data-tab="digital" class="tab-btn bg-gray-800 text-gray-300 font-semibold py-2 px-6 rounded-full shadow-md">Strategic Insights</button>
+                    <button data-tab="langsung" class="tab-btn bg-gray-800 text-gray-300 font-semibold py-2 px-6 rounded-full shadow-md">Digital Perception Engineering</button>
                 </div>
 
                 <!-- Tab Content -->
@@ -301,26 +408,26 @@
         <section id="kolaborasi" class="py-24 bg-gray-900 overflow-hidden">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12" data-aos="fade-up">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Dipercaya oleh Brand Ternama</h2>
-                    <p class="max-w-2xl mx-auto text-gray-400">Kami bangga telah berkolaborasi dengan berbagai organisasi, dari BUMN hingga pemerintah daerah.</p>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Dipercaya oleh Brand dan Tokoh Ternama</h2>
+                    <p class="max-w-2xl mx-auto text-gray-400">Kami bangga telah berkolaborasi dengan berbagai organisasi, dari BUMN hingga brand ternama.</p>
                 </div>
-                <div class="relative max-w-5xl mx-auto" data-aos="zoom-in">
-                    <div class="overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
+                <div class="relative max-w-6xl mx-auto" data-aos="zoom-in">
+                    <div class="overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_4rem,_black_calc(100%-4rem),transparent_100%)]">
                         <div class="scrolling-slider flex items-center">
                             <!-- Original Logos -->
-                            <div class="flex-shrink-0 w-1/2 md:w-1/4 p-8"><img src="https://placehold.co/200x100/e2e8f0/94a3b8?text=80+Tahun+Bakrie" alt="Logo 80 Tahun Bakrie" class="h-16 mx-auto grayscale hover:grayscale-0 transition duration-300 opacity-50 hover:opacity-100"></div>
-                            <div class="flex-shrink-0 w-1/2 md:w-1/4 p-8"><img src="https://placehold.co/200x100/e2e8f0/94a3b8?text=Belitung" alt="Logo Belitung" class="h-16 mx-auto grayscale hover:grayscale-0 transition duration-300 opacity-50 hover:opacity-100"></div>
-                            <div class="flex-shrink-0 w-1/2 md:w-1/4 p-8"><img src="https://placehold.co/200x100/e2e8f0/94a3b8?text=InJourney" alt="Logo InJourney" class="h-16 mx-auto grayscale hover:grayscale-0 transition duration-300 opacity-50 hover:opacity-100"></div>
-                            <div class="flex-shrink-0 w-1/2 md:w-1/4 p-8"><img src="https://placehold.co/200x100/e2e8f0/94a3b8?text=Klien+Lain" alt="Logo Klien Lain" class="h-16 mx-auto grayscale hover:grayscale-0 transition duration-300 opacity-50 hover:opacity-100"></div>
-                            <div class="flex-shrink-0 w-1/2 md:w-1/4 p-8"><img src="https://placehold.co/200x100/e2e8f0/94a3b8?text=Pemda+XYZ" alt="Logo Pemda XYZ" class="h-16 mx-auto grayscale hover:grayscale-0 transition duration-300 opacity-50 hover:opacity-100"></div>
-                            <div class="flex-shrink-0 w-1/2 md:w-1/4 p-8"><img src="https://placehold.co/200x100/e2e8f0/94a3b8?text=Korporat+Besar" alt="Logo Korporat Besar" class="h-16 mx-auto grayscale hover:grayscale-0 transition duration-300 opacity-50 hover:opacity-100"></div>
+                            <div class="flex-shrink-0 w-[250px] p-4"><div class="bg-white transition-colors duration-300 p-6 rounded-xl flex items-center justify-center h-32"><img src="https://i.imgur.com/doCoTlg.jpeg" alt="Logo Pertamina" class="max-h-full max-w-full object-contain"></div></div>
+                            <div class="flex-shrink-0 w-[250px] p-4"><div class="bg-white transition-colors duration-300 p-6 rounded-xl flex items-center justify-center h-32"><img src="https://i.imgur.com/6OIl1wu.png" alt="Logo BNI" class="max-h-full max-w-full object-contain"></div></div>
+                            <div class="flex-shrink-0 w-[250px] p-4"><div class="bg-green-600 transition-colors duration-300 p-6 rounded-xl flex items-center justify-center h-32"><img src="https://i.imgur.com/pYee9au.png" alt="Logo Grab" class="max-h-full max-w-full object-contain"></div></div>
+                            <div class="flex-shrink-0 w-[250px] p-4"><div class="bg-white transition-colors duration-300 p-6 rounded-xl flex items-center justify-center h-32"><img src="https://i.imgur.com/5qNT9oZ.png" alt="Logo Paragon" class="max-h-full max-w-full object-contain"></div></div>
+                            <div class="flex-shrink-0 w-[250px] p-4"><div class="bg-white transition-colors duration-300 p-6 rounded-xl flex items-center justify-center h-32"><img src="https://i.imgur.com/6iu4JQS.png" alt="Logo Unhasy" class="max-h-full max-w-full object-contain"></div></div>
+                            <div class="flex-shrink-0 w-[250px] p-4"><div class="transition-colors duration-300 rounded-xl flex items-center justify-center h-32 overflow-hidden"><img src="https://i.imgur.com/t5I0vh0.png" alt="Logo Prabowo Gibran" class="h-full w-full object-cover"></div></div>
                             <!-- Cloned Logos for infinite loop -->
-                            <div class="flex-shrink-0 w-1/2 md:w-1/4 p-8"><img src="https://placehold.co/200x100/e2e8f0/94a3b8?text=80+Tahun+Bakrie" alt="Logo 80 Tahun Bakrie" class="h-16 mx-auto grayscale hover:grayscale-0 transition duration-300 opacity-50 hover:opacity-100"></div>
-                            <div class="flex-shrink-0 w-1/2 md:w-1/4 p-8"><img src="https://placehold.co/200x100/e2e8f0/94a3b8?text=Belitung" alt="Logo Belitung" class="h-16 mx-auto grayscale hover:grayscale-0 transition duration-300 opacity-50 hover:opacity-100"></div>
-                            <div class="flex-shrink-0 w-1/2 md:w-1/4 p-8"><img src="https://placehold.co/200x100/e2e8f0/94a3b8?text=InJourney" alt="Logo InJourney" class="h-16 mx-auto grayscale hover:grayscale-0 transition duration-300 opacity-50 hover:opacity-100"></div>
-                            <div class="flex-shrink-0 w-1/2 md:w-1/4 p-8"><img src="https://placehold.co/200x100/e2e8f0/94a3b8?text=Klien+Lain" alt="Logo Klien Lain" class="h-16 mx-auto grayscale hover:grayscale-0 transition duration-300 opacity-50 hover:opacity-100"></div>
-                            <div class="flex-shrink-0 w-1/2 md:w-1/4 p-8"><img src="https://placehold.co/200x100/e2e8f0/94a3b8?text=Pemda+XYZ" alt="Logo Pemda XYZ" class="h-16 mx-auto grayscale hover:grayscale-0 transition duration-300 opacity-50 hover:opacity-100"></div>
-                            <div class="flex-shrink-0 w-1/2 md:w-1/4 p-8"><img src="https://placehold.co/200x100/e2e8f0/94a3b8?text=Korporat+Besar" alt="Logo Korporat Besar" class="h-16 mx-auto grayscale hover:grayscale-0 transition duration-300 opacity-50 hover:opacity-100"></div>
+                            <div class="flex-shrink-0 w-[250px] p-4"><div class="bg-white transition-colors duration-300 p-6 rounded-xl flex items-center justify-center h-32"><img src="https://i.imgur.com/doCoTlg.jpeg" alt="Logo Pertamina" class="max-h-full max-w-full object-contain"></div></div>
+                            <div class="flex-shrink-0 w-[250px] p-4"><div class="bg-white transition-colors duration-300 p-6 rounded-xl flex items-center justify-center h-32"><img src="https://i.imgur.com/6OIl1wu.png" alt="Logo BNI" class="max-h-full max-w-full object-contain"></div></div>
+                            <div class="flex-shrink-0 w-[250px] p-4"><div class="bg-green-600 transition-colors duration-300 p-6 rounded-xl flex items-center justify-center h-32"><img src="https://i.imgur.com/pYee9au.png" alt="Logo Grab" class="max-h-full max-w-full object-contain"></div></div>
+                            <div class="flex-shrink-0 w-[250px] p-4"><div class="bg-white transition-colors duration-300 p-6 rounded-xl flex items-center justify-center h-32"><img src="https://i.imgur.com/5qNT9oZ.png" alt="Logo Paragon" class="max-h-full max-w-full object-contain"></div></div>
+                            <div class="flex-shrink-0 w-[250px] p-4"><div class="bg-white transition-colors duration-300 p-6 rounded-xl flex items-center justify-center h-32"><img src="https://i.imgur.com/6iu4JQS.png" alt="Logo Unhasy" class="max-h-full max-w-full object-contain"></div></div>
+                            <div class="flex-shrink-0 w-[250px] p-4"><div class="transition-colors duration-300 rounded-xl flex items-center justify-center h-32 overflow-hidden"><img src="https://i.imgur.com/t5I0vh0.png" alt="Logo Prabowo Gibran" class="h-full w-full object-cover"></div></div>
                         </div>
                     </div>
                 </div>
@@ -394,30 +501,6 @@
                                 <p class="text-sm text-gray-500">Marketing Director, Korporat Jaya</p>
                             </div>
                         </div>
-                        <div class="bg-gray-900 p-8 rounded-lg w-80 md:w-96 flex-shrink-0">
-                            <i data-lucide="quote" class="w-10 h-10 text-yellow-400 mb-4"></i>
-                            <p class="text-gray-400 mb-6">"Kampanye yang dijalankan berhasil meningkatkan engagement kami secara signifikan. Sangat direkomendasikan!"</p>
-                            <div>
-                                <p class="font-bold text-white">Budi Santoso</p>
-                                <p class="text-sm text-gray-500">Kepala Dinas, Pemerintah Daerah</p>
-                            </div>
-                        </div>
-                        <div class="bg-gray-900 p-8 rounded-lg w-80 md:w-96 flex-shrink-0">
-                            <i data-lucide="quote" class="w-10 h-10 text-yellow-400 mb-4"></i>
-                            <p class="text-gray-400 mb-6">"Pendekatan strategis Selawe benar-benar jitu. Mereka berhasil mengubah cara kami berkomunikasi dengan publik."</p>
-                            <div>
-                                <p class="font-bold text-white">Dewi Anggraini</p>
-                                <p class="text-sm text-gray-500">Founder, Brand Lokal</p>
-                            </div>
-                        </div>
-                        <div class="bg-gray-900 p-8 rounded-lg w-80 md:w-96 flex-shrink-0">
-                            <i data-lucide="quote" class="w-10 h-10 text-yellow-400 mb-4"></i>
-                            <p class="text-gray-400 mb-6">"Profesional, kreatif, dan selalu on-time. Pengalaman kerja sama yang sangat menyenangkan dan membuahkan hasil."</p>
-                            <div>
-                                <p class="font-bold text-white">Rahmat Hidayat</p>
-                                <p class="text-sm text-gray-500">Manager, BUMN</p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -434,7 +517,7 @@
                 <div class="max-w-3xl mx-auto space-y-1" data-aos="fade-up" data-aos-delay="100">
                     <!-- FAQ Item 1 -->
                     <div class="faq-item border-b border-gray-700 py-4">
-                        <div class="faq-question flex justify-between items-center">
+                        <div class="faq-question flex justify-between items-center cursor-pointer">
                             <h3 class="font-semibold text-lg text-white">Layanan apa saja yang ditawarkan Selawe?</h3>
                             <div class="text-yellow-400">
                                 <i data-lucide="chevron-down" class="icon-rotate"></i>
@@ -446,7 +529,7 @@
                     </div>
                     <!-- FAQ Item 2 -->
                     <div class="faq-item border-b border-gray-700 py-4">
-                        <div class="faq-question flex justify-between items-center">
+                        <div class="faq-question flex justify-between items-center cursor-pointer">
                             <h3 class="font-semibold text-lg text-white">Bagaimana model penetapan harga di Selawe?</h3>
                             <div class="text-yellow-400">
                                 <i data-lucide="chevron-down" class="icon-rotate"></i>
@@ -458,7 +541,7 @@
                     </div>
                     <!-- FAQ Item 3 -->
                     <div class="faq-item border-b border-gray-700 py-4">
-                        <div class="faq-question flex justify-between items-center">
+                        <div class="faq-question flex justify-between items-center cursor-pointer">
                             <h3 class="font-semibold text-lg text-white">Berapa lama waktu yang dibutuhkan untuk melihat hasil?</h3>
                             <div class="text-yellow-400">
                                 <i data-lucide="chevron-down" class="icon-rotate"></i>
@@ -466,30 +549,6 @@
                         </div>
                         <div class="faq-answer pt-2 text-gray-400">
                             <p>Waktu untuk melihat hasil bervariasi tergantung pada jenis layanan dan tujuan kampanye. Untuk kampanye digital seperti iklan media sosial, hasil awal bisa terlihat dalam beberapa minggu. Untuk strategi jangka panjang seperti SEO atau pembangunan brand, biasanya membutuhkan waktu 3-6 bulan untuk melihat dampak yang signifikan.</p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 4 -->
-                    <div class="faq-item border-b border-gray-700 py-4">
-                        <div class="faq-question flex justify-between items-center">
-                            <h3 class="font-semibold text-lg text-white">Apakah Selawe melayani klien di luar Jakarta & Tegal?</h3>
-                            <div class="text-yellow-400">
-                                <i data-lucide="chevron-down" class="icon-rotate"></i>
-                            </div>
-                        </div>
-                        <div class="faq-answer pt-2 text-gray-400">
-                            <p>Tentu saja. Meskipun kantor fisik kami berada di Jakarta dan Tegal, kami melayani klien dari seluruh Indonesia. Tim kami terbiasa bekerja secara remote dan dapat melakukan perjalanan dinas jika memang diperlukan untuk proyek Anda.</p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 5 -->
-                    <div class="faq-item border-b border-gray-700 py-4">
-                        <div class="faq-question flex justify-between items-center">
-                            <h3 class="font-semibold text-lg text-white">Bagaimana cara memulai kerja sama dengan Selawe?</h3>
-                            <div class="text-yellow-400">
-                                <i data-lucide="chevron-down" class="icon-rotate"></i>
-                            </div>
-                        </div>
-                        <div class="faq-answer pt-2 text-gray-400">
-                            <p>Langkah pertama adalah menghubungi kami melalui email atau telepon yang tertera di bagian <a href="#footer" class="text-yellow-400 underline">kontak</a>. Tim kami akan menjadwalkan sesi diskusi awal untuk memahami kebutuhan dan tujuan Anda, lalu kami akan menyusun proposal yang disesuaikan untuk Anda.</p>
                         </div>
                     </div>
                 </div>
@@ -531,11 +590,12 @@
                 <div class="md:col-span-1">
                      <h4 class="text-lg font-semibold text-white mb-4">Tautan Cepat</h4>
                      <ul class="space-y-2">
-                        <li><a href="#tentang" class="hover:text-yellow-400 transition">Tentang Kami</a></li>
-                        <li><a href="#layanan" class="hover:text-yellow-400 transition">Layanan</a></li>
-                        <li><a href="#kolaborasi" class="hover:text-yellow-400 transition">Klien</a></li>
-                        <li><a href="#testimoni" class="hover:text-yellow-400 transition">Testimoni</a></li>
-                        <li><a href="#faq" class="hover:text-yellow-400 transition">FAQ</a></li>
+                         <li><a href="#tentang" class="hover:text-yellow-400 transition">Tentang Kami</a></li>
+                         <li><a href="#layanan" class="hover:text-yellow-400 transition">Layanan</a></li>
+                         <li><a href="#proyek" class="hover:text-yellow-400 transition">Proyek</a></li>
+                         <li><a href="#kolaborasi" class="hover:text-yellow-400 transition">Klien</a></li>
+                         <li><a href="#testimoni" class="hover:text-yellow-400 transition">Testimoni</a></li>
+                         <li><a href="#faq" class="hover:text-yellow-400 transition">FAQ</a></li>
                      </ul>
                 </div>
                 <!-- Column 3: Contact & Social -->
@@ -574,6 +634,26 @@
     <a href="#header" id="back-to-top" class="fixed bottom-5 right-5 bg-yellow-400 p-3 rounded-full shadow-lg hover:bg-yellow-500 transition-all duration-300 opacity-0 scale-90 z-50">
         <i data-lucide="arrow-up" class="text-gray-900"></i>
     </a>
+
+    <!-- ===== Project Detail Modal ===== -->
+    <div id="project-modal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 hidden">
+        <!-- Overlay -->
+        <div id="modal-overlay" class="modal-overlay absolute inset-0 bg-black/70 opacity-0"></div>
+        
+        <!-- Modal Container -->
+        <div id="modal-container" class="modal-container relative bg-gray-900 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 border border-gray-700 opacity-0 transform scale-95">
+            <!-- Close Button -->
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-yellow-400 transition-colors">
+                <i data-lucide="x" class="w-7 h-7"></i>
+            </button>
+            
+            <!-- Modal Content -->
+            <h3 id="modal-title" class="text-2xl md:text-3xl font-bold text-white mb-4"></h3>
+            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+            <p id="modal-description" class="text-gray-400 leading-relaxed"></p>
+        </div>
+    </div>
+
 
     <!-- ===== JavaScript ===== -->
     <!-- AOS JS -->
@@ -649,7 +729,7 @@
                             const inc = Math.ceil(target / speed);
 
                             if (count < target) {
-                                counter.innerText = count + inc;
+                                counter.innerText = Math.min(count + inc, target);
                                 setTimeout(updateCount, 10);
                             } else {
                                 counter.innerText = target;
@@ -676,8 +756,8 @@
                     // Tutup semua item lain
                     faqItems.forEach(otherItem => {
                         if (otherItem !== item) {
-                           otherItem.classList.remove('open');
-                           otherItem.querySelector('.faq-answer').style.maxHeight = null;
+                            otherItem.classList.remove('open');
+                            otherItem.querySelector('.faq-answer').style.maxHeight = null;
                         }
                     });
 
@@ -691,6 +771,64 @@
                     }
                 });
             });
+
+            // Logika untuk Modal Proyek
+            const modal = document.getElementById('project-modal');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalContainer = document.getElementById('modal-container');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const openModalButtons = document.querySelectorAll('.open-modal-btn');
+            const closeModalButton = document.getElementById('close-modal-btn');
+
+            const openModal = (title, description) => {
+                modalTitle.textContent = title;
+                modalDescription.textContent = description;
+                document.body.classList.add('modal-open');
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modalOverlay.classList.remove('opacity-0');
+                    modalContainer.classList.remove('opacity-0', 'scale-95');
+                }, 10);
+            };
+
+            const closeModal = () => {
+                modalOverlay.classList.add('opacity-0');
+                modalContainer.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.classList.remove('modal-open');
+                }, 300);
+            };
+
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const title = button.dataset.title;
+                    const description = button.dataset.description;
+                    openModal(title, description);
+                });
+            });
+
+            closeModalButton.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', closeModal);
+
+            // Logika untuk Slider Proyek
+            const proyekContainer = document.getElementById('proyek-container');
+            const scrollLeftBtn = document.getElementById('scroll-left-btn');
+            const scrollRightBtn = document.getElementById('scroll-right-btn');
+
+            if (proyekContainer) {
+                const scrollAmount = 320 + 32; // card width + gap
+
+                scrollLeftBtn.addEventListener('click', () => {
+                    proyekContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                });
+
+                scrollRightBtn.addEventListener('click', () => {
+                    proyekContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                });
+            }
+
         });
     </script>
 </body>
